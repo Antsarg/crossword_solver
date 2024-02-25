@@ -5,20 +5,19 @@ from ttkbootstrap.scrolled import ScrolledText
 from ttkbootstrap.dialogs import Messagebox
 import re
 
-global word_list
-word_list = []
-
+HIGH_SCORED_LIST = "assets\spreadthewordlist_unscored_high.txt"
+UNSCORED_LIST = ""
 
 # load a list of possible crossword answers
 def load_list(fname):
     with open(fname) as f:
         global word_list
         result = f.readlines()
-        word_list = map(str.rstrip, result)
+        return list(map(str.rstrip, result))
 
 
 # look for words that match a given pattern
-def search_words(pattern: str):
+def search_words(pattern: str, word_list: list):
     pattern = pattern.replace("?", ".").lower()
     matched = []
     for w in word_list:
@@ -43,6 +42,8 @@ class App(tb.Window):
         # create shortcut for help window
         self.bind("<F1>", self.show_help)
 
+        self.word_list = load_list(HIGH_SCORED_LIST)
+
     def show_help(self, e):
         mb = Messagebox.show_info('Insert a pattern in the entry ox, then press Search ',
             "App Info" )
@@ -50,7 +51,7 @@ class App(tb.Window):
 
     def search_pattern(self):
         pattern = self.entry_var.get()
-        words = search_words(pattern)
+        words = search_words(pattern, self.word_list)
         self.status_bar.configure(
             text=f"{len(words)} words found for pattern: {pattern}"
         )
@@ -86,7 +87,7 @@ class App(tb.Window):
 
 
 def main():
-    load_list("assets\spreadthewordlist_unscored_high.txt")
+    word_list = load_list("assets\spreadthewordlist_unscored_high.txt")
     app = App(themename="superhero")
     app.mainloop()
 

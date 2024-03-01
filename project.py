@@ -8,6 +8,7 @@ import re
 HIGH_SCORED_LIST = "assets\spreadthewordlist_unscored_high.txt"
 UNSCORED_LIST = ""
 
+
 # load a list of possible crossword answers
 def load_list(fname):
     with open(fname) as f:
@@ -24,6 +25,16 @@ def search_words(pattern: str, word_list: list):
         if re.fullmatch(pattern, w):
             matched.append(w)
     return matched
+
+
+def validate_pattern(s: str):
+    if len(s) < 3:
+        return 1
+    if re.match(r"^[a-z?]+$", s, flags=re.IGNORECASE) == None:
+        return 2
+    if "?" not in s:
+        return 3
+    return 0
 
 
 class App(tb.Window):
@@ -45,9 +56,9 @@ class App(tb.Window):
         self.word_list = load_list(HIGH_SCORED_LIST)
 
     def show_help(self, e):
-        mb = Messagebox.show_info('Insert a pattern in the entry ox, then press Search ',
-            "App Info" )
-
+        mb = Messagebox.show_info(
+            "Insert a pattern in the entry ox, then press Search ", "App Info"
+        )
 
     def search_pattern(self):
         pattern = self.entry_var.get()
@@ -59,10 +70,10 @@ class App(tb.Window):
 
     def create_frame(self, stringvar):
         top_frame = tb.Frame(self, height=100, relief=SUNKEN)
-        hint = tb.Label(top_frame, text= 'Insert Pattern:', font="Calibri,18")
+        hint = tb.Label(top_frame, text="Insert Pattern:", font="Calibri,18")
         hint.pack(side=LEFT, padx=20)
         my_entry = tb.Entry(top_frame, bootstyle=LIGHT, width=15, font="Calibri, 18")
-        my_entry.pack(side = LEFT, pady=20)
+        my_entry.pack(side=LEFT, pady=20)
         my_entry.configure(textvariable=stringvar)
         search_btn = tb.Button(
             top_frame, text="Search", command=self.search_pattern, bootstyle="primary"

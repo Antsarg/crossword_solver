@@ -1,5 +1,5 @@
 import pytest
-from project import search_words,  load_list
+from project import search_words, load_list, validate_pattern
 
 
 @pytest.fixture
@@ -19,3 +19,9 @@ def test_search_words(unscored_list: list):
     assert "terrain" in search_words("t??ra??", unscored_list)
     assert "score" not in search_words("st?r?", unscored_list)
     assert "darkroom" not in search_words("dar??", unscored_list)
+
+def test_validate_pattern():
+    assert validate_pattern("ai??lane") == 0 #valid pattern
+    assert validate_pattern("ab") == 1 # pattern must contain at least 3 char
+    assert validate_pattern("f??2est") ==  2 # only letters and ? are allowwed
+    assert validate_pattern("beyonce") == 3 # pattern must contain at least 1 ? 

@@ -1,3 +1,4 @@
+from mailbox import mboxMessage
 from tkinter import *
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
@@ -5,8 +6,14 @@ from ttkbootstrap.scrolled import ScrolledText
 from ttkbootstrap.dialogs import Messagebox
 import re
 
-HIGH_SCORED_LIST = "assets\spreadthewordlist_unscored_high.txt"
+HIGH_SCORED_LIST = "assets/spreadthewordlist_unscored_high.txt"
 UNSCORED_LIST = ""
+WARNING_MESSAGES = [
+    "valid pattern",
+    "pattern must contain at least 3 totalchar",
+    "only letters and ? are allowed in pattern",
+    "pattern must contain at least 1 unknown letter",
+]
 
 
 # load a list of possible crossword answers
@@ -27,6 +34,7 @@ def search_words(pattern: str, word_list: list):
     return matched
 
 
+# check if the user entered a valid path
 def validate_pattern(s: str):
     if len(s) < 3:
         return 1
@@ -48,7 +56,7 @@ class App(tb.Window):
         self.status_bar = self.create_status_bar()
         self.status_bar.pack(side=BOTTOM, fill=X)
         self.display = self.create_text_area()
-        self.display.pack(side=LEFT, fill=BOTH, expand=TRUE)
+        self.display.pack(side=LEFT, fill=BOTH, expand=TRUE, padx=5, pady=5)
 
         # create shortcut for help window
         self.bind("<F1>", self.show_help)
@@ -57,16 +65,21 @@ class App(tb.Window):
 
     def show_help(self, e):
         mb = Messagebox.show_info(
-            "Insert a pattern in the entry ox, then press Search ", "App Info"
+            "Insert a pattern in the entry box, then press Search ", "App Info"
         )
 
     def search_pattern(self):
         pattern = self.entry_var.get()
-        words = search_words(pattern, self.word_list)
-        self.status_bar.configure(
-            text=f"{len(words)} words found for pattern: {pattern}"
-        )
-        self.display.insert(END, "\n".join(words))
+        result = validate_pattern(pattern)
+        if result == 0:
+            words = search_words(pattern, self.word_list)
+            self.status_bar.configure(
+                text=f"{len(words)} words found for pattern: {pattern}"
+            )
+            self.display.delete("1.0", END)
+            self.display.insert(END, "\n".join(words))
+        else:
+            mb = Messagebox.show_warning(WARNING_MESSAGES[result], "Invalid Pattern")
 
     def create_frame(self, stringvar):
         top_frame = tb.Frame(self, height=100, relief=SUNKEN)
@@ -83,7 +96,9 @@ class App(tb.Window):
         return top_frame
 
     def create_text_area(self):
-        my_text = ScrolledText(self, bootstyle="success", autohide=True)
+        my_text = ScrolledText(
+            self, bootstyle="success", autohide=True, font="Helvetica, 14"
+        )
         return my_text
 
     def create_status_bar(self):
@@ -98,7 +113,6 @@ class App(tb.Window):
 
 
 def main():
-    word_list = load_list("assets\spreadthewordlist_unscored_high.txt")
     app = App(themename="superhero")
     app.mainloop()
 

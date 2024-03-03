@@ -24,6 +24,9 @@ def load_list(fname):
         return list(map(str.rstrip, result))
 
 
+
+
+
 # look for words that match a given pattern
 def search_words(pattern: str, word_list: list):
     pattern = pattern.replace("?", ".").lower()
@@ -68,6 +71,12 @@ class App(tb.Window):
             "Insert a pattern in the entry box, then press Search ", "App Info"
         )
 
+    # clear entry field and display area
+        
+    def clear_entry(self):
+        self.entry_var.set("")
+        self.display.delete(*self.display.get_children())
+
     def search_pattern(self):
         pattern = self.entry_var.get()
         result = validate_pattern(pattern)
@@ -76,30 +85,54 @@ class App(tb.Window):
             self.status_bar.configure(
                 text=f"{len(words)} words found for pattern: {pattern}"
             )
-            self.display.delete("1.0", END)
-            self.display.insert(END, "\n".join(words))
+            self.display.delete(*self.display.get_children())
+            n_col = 3
+            for pos in range(0, len(words),n_col):
+                self.display.insert("", END, values = words[pos: pos + n_col])
         else:
-            mb = Messagebox.show_warning(WARNING_MESSAGES[result], "Invalid Pattern")
+            mb = Messagebox.show_warning(
+                WARNING_MESSAGES[result], "Invalid Pattern"
+            )
 
     def create_frame(self, stringvar):
         top_frame = tb.Frame(self, height=100, relief=SUNKEN)
-        hint = tb.Label(top_frame, text="Insert Pattern:", font="Calibri,18")
+        hint = tb.Label(top_frame, text="Entry Pattern:", font="Calibri,18")
         hint.pack(side=LEFT, padx=20)
-        my_entry = tb.Entry(top_frame, bootstyle=LIGHT, width=15, font="Calibri, 18")
+        my_entry = tb.Entry(
+            top_frame, bootstyle=LIGHT, width=15, font="Calibri, 18"
+        )
         my_entry.pack(side=LEFT, pady=20)
         my_entry.configure(textvariable=stringvar)
-        search_btn = tb.Button(
-            top_frame, text="Search", command=self.search_pattern, bootstyle="primary"
+        clear_button = tb.Button(
+            top_frame,
+            text = "Clear",
+            command = self.clear_entry,
+            bootstyle = "success",
+            width = 8,
         )
-        search_btn.pack(side=LEFT, padx=25)
+        clear_button.pack(side=LEFT, padx= 25)
+        search_btn = tb.Button(
+            top_frame,
+            text="Search",
+            command=self.search_pattern,
+            bootstyle="primary",
+            width = 8,
+        )
+        search_btn.pack(side=LEFT, padx= 10)
 
         return top_frame
 
     def create_text_area(self):
-        my_text = ScrolledText(
-            self, bootstyle="success", autohide=True, font="Helvetica, 14"
+        my_style = tb.Style()
+        my_style.configure("success.Treeview", font="Calibri, 12", rowheight= 25)
+        my_table = tb.Treeview(
+            self,
+            bootstyle="success",
+            columns=["col1", "col2", "col3"],
+            style="success.Treeview",
+            show="",
         )
-        return my_text
+        return my_table
 
     def create_status_bar(self):
         my_label = tb.Label(

@@ -25,5 +25,7 @@ the main folder for the project (project) contain 4 files:
 
 there is also an inner directory **assets** that contain data used by the application
 
-For interacting with users the program shows a Graphical User Interface made  with Tkinter with the help of **TTKbootstrap** a theme extesion that enable modern flat style themes
+For interacting with users the program shows a Graphical User Interface made  with Tkinter with the help of [**TTKbootstrap**](https://ttkbootstrap.readthedocs.io/en/latest/) Copyright © 2021-2022 Israel Dryer
+
+ a theme extesion that enable modern flat style themes
 </div>

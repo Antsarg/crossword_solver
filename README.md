@@ -20,7 +20,7 @@ the main folder for the project (project) contain 4 files:
 
 **project.py** - contain the source file for the application   
 **test_project** - contain a set of test to prove that the application is working correctly    
-**requirements.text** - set the libraries to install for make Crossword Solver work
+**requirements.text** - set the libraries to install for make Crossword Solver work   
 **README.md** - the markdown text you're currently reading
 
 there is also an inner directory **assets** that contain data used by the application

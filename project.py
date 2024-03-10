@@ -1,12 +1,14 @@
 from mailbox import mboxMessage
 from tkinter import *
+import tkinter
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledText
 from ttkbootstrap.dialogs import Messagebox
 import re
+import sys
 
-HIGH_SCORED_LIST = "assets/spreadthewordlist_unscored_high.txt"
+HIGH_SCORED_LIST = "assets\\spreadthewordlist_unscored_high.txt"
 UNSCORED_LIST = ""
 WARNING_MESSAGES = [
     "valid pattern",
@@ -14,17 +16,23 @@ WARNING_MESSAGES = [
     "only letters and ? are allowed in pattern",
     "pattern must contain at least 1 unknown letter",
 ]
+HELP_MSG = """Enter the known letters for the world to be solved
+in the Entry Field at the top of the windows. Enter '?' for the
+letters discovered yet, press the 'search' green button to look for 
+matching words, they will appear in the display area in the centre
+of the screen."""
 
 
 # load a list of possible crossword answers
 def load_list(fname):
-    with open(fname) as f:
-        global word_list
-        result = f.readlines()
-        return list(map(str.rstrip, result))
-
-
-
+    try:
+        with open(fname) as f:
+            global word_list
+            result = f.readlines()
+            return list(map(str.rstrip, result))
+    except FileNotFoundError:
+        print(f"File {fname} not found")
+        sys.exit(1)
 
 
 # look for words that match a given pattern
@@ -48,6 +56,22 @@ def validate_pattern(s: str):
     return 0
 
 
+class HelpWindov(tkinter.Toplevel):
+
+    
+    def __init__(self, master, *args):
+        
+        super().__init__(master, *args)
+        self.title("help")
+        self.geometry("600x400")
+        self.button = tb.Button(self, text="Close", command=self.destroy)
+        self.button.pack(pady=10, side=BOTTOM)
+        self.text = tb.Text(self, font="Calibri, 12")
+        self.text.insert("end",HELP_MSG)
+        self.text.pack(side=LEFT, fill=BOTH, expand=True)
+        self.grab_set()
+
+
 class App(tb.Window):
     def __init__(self, themename):
         super().__init__(self, themename)
@@ -63,20 +87,22 @@ class App(tb.Window):
 
         # create shortcut for help window
         self.bind("<F1>", self.show_help)
-
         self.word_list = load_list(HIGH_SCORED_LIST)
 
     def show_help(self, e):
-        mb = Messagebox.show_info(
-            "Insert a pattern in the entry box, then press Search ", "App Info"
-        )
+        HelpWindov(self)
+        # mb = Messagebox.show_info(
+        #     "Insert a pattern in the entry box, then press Search ", "App Info"
+        # )
 
     # clear entry field and display area
-        
+
     def clear_entry(self):
         self.entry_var.set("")
         self.display.delete(*self.display.get_children())
+        self.status_bar.configure(text="Press F1 for Help")
 
+    # search words matching pattern
     def search_pattern(self):
         pattern = self.entry_var.get()
         result = validate_pattern(pattern)
@@ -87,15 +113,15 @@ class App(tb.Window):
             )
             self.display.delete(*self.display.get_children())
             n_col = 3
-            for pos in range(0, len(words),n_col):
-                self.display.insert("", END, values = words[pos: pos + n_col])
+            for pos in range(0, len(words), n_col):
+                self.display.insert("", END, values=words[pos : pos + n_col])
         else:
             mb = Messagebox.show_warning(
                 WARNING_MESSAGES[result], "Invalid Pattern"
             )
 
     def create_frame(self, stringvar):
-        top_frame = tb.Frame(self, height=100, relief=SUNKEN)
+        top_frame = tb.Frame(self, height=100)
         hint = tb.Label(top_frame, text="Entry Pattern:", font="Calibri,18")
         hint.pack(side=LEFT, padx=20)
         my_entry = tb.Entry(
@@ -105,26 +131,28 @@ class App(tb.Window):
         my_entry.configure(textvariable=stringvar)
         clear_button = tb.Button(
             top_frame,
-            text = "Clear",
-            command = self.clear_entry,
-            bootstyle = "success",
-            width = 8,
+            text="Clear",
+            command=self.clear_entry,
+            bootstyle="success",
+            width=8,
         )
-        clear_button.pack(side=LEFT, padx= 25)
+        clear_button.pack(side=LEFT, padx=25)
         search_btn = tb.Button(
             top_frame,
             text="Search",
             command=self.search_pattern,
             bootstyle="primary",
-            width = 8,
+            width=8,
         )
-        search_btn.pack(side=LEFT, padx= 10)
+        search_btn.pack(side=LEFT, padx=10)
 
         return top_frame
 
     def create_text_area(self):
         my_style = tb.Style()
-        my_style.configure("success.Treeview", font="Calibri, 12", rowheight= 25)
+        my_style.configure(
+            "success.Treeview", font="Calibri, 12", rowheight=25
+        )
         my_table = tb.Treeview(
             self,
             bootstyle="success",
@@ -137,7 +165,7 @@ class App(tb.Window):
     def create_status_bar(self):
         my_label = tb.Label(
             self,
-            text="Characters: 0",
+            text="Press F1 for help",
             font="Helvetica, 14",
             bootstyle="inverse",
             relief=SUNKEN,

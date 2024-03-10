@@ -2,10 +2,11 @@
 
 ### Project Description
 <div align = justify>
-This is my entry as final project for the Course "CS50's Introduction to Programming with Python_"
+This is my entry as final project for the Course "CS50's Introduction to Programming with Python".
 The scope of the program is to find all the possible answers for a Crossword when you knows only some of the letters for the world to be solved.
-The possible answers will be searched in a list of words provided by [Brooke Husic](https://twitter.com/xandraladee) e [Enrique Henestroza Anguiano](https://(https://twitter.com/datalexic)) for more information see [Spread the word (list)](https://www.spreadthewordlist.com/)
-</div>
+
+ Possible answers will be searched in a list of words provided by [Brooke  Husic](https://twitter.com/xandraladee) e [Enrique Henestroza Anguiano](https://(https://twitter.com/datalexic)) for more information see [Spread the word (list)](https://www.spreadthewordlist.com/)
+ </div>
 
 ### How to use
 <div align = justify>
@@ -23,10 +24,9 @@ the main folder for the project (project) contain 4 files:
 **requirements.text** - set the libraries to install for make Crossword Solver work   
 **README.md** - the markdown text you're currently reading
 
-there is also an inner directory **assets** that contain data used by the application
+hte main folder contains there an inner directory **assets** that  store data used by the application
 
-For interacting with users the program shows a Graphical User Interface made  with Tkinter with the help of [**TTKbootstrap**](https://ttkbootstrap.readthedocs.io/en/latest/)  a theme extesion that enable modern flat style themes 
-Copyright © 2021-2022 Israel Dryer
-
+For interacting with users the program shows a Graphical User Interface made  with Tkinter with the help of [TTKbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/) (Copyright © 2021-2022 Israel Dryer) a theme extesion that enable modern flat style themes
 
 </div>
+

@@ -18,15 +18,14 @@ The software will display ordinary words that you can find in dictionaries and a
 ### Project structure
 <div align = justify>
 the main folder for the project (project) contain 4 files:   
-
 **project.py** - contain the source file for the application   
 **test_project** - contain a set of test to prove that the application is working correctly    
 **requirements.text** - set the libraries to install for make Crossword Solver work   
 **README.md** - the markdown text you're currently reading
 
-hte main folder contains there an inner directory **assets** that  store data used by the application
+it also contain an inner folder **assets** that store data used by the application
 
-For interacting with users the program shows a Graphical User Interface made  with Tkinter with the help of [TTKbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/) (Copyright © 2021-2022 Israel Dryer) a theme extesion that enable modern flat style themes
+For interacting with users the program shows a Graphical User Interface created  with Tkinter with the help of [TTKbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/) (Copyright © 2021-2022 Israel Dryer) a theme extesion that enable modern flat style themes
 
 </div>
 

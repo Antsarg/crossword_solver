@@ -16,11 +16,7 @@ WARNING_MESSAGES = [
     "only letters and ? are allowed in pattern",
     "pattern must contain at least 1 unknown letter",
 ]
-HELP_MSG = """Enter the known letters for the world to be solved
-in the Entry Field at the top of the windows. Enter '?' for the
-letters discovered yet, press the 'search' green button to look for 
-matching words, they will appear in the display area in the centre
-of the screen."""
+ 
 
 
 # load a list of possible crossword answers
@@ -56,20 +52,29 @@ def validate_pattern(s: str):
     return 0
 
 
-class HelpWindov(tkinter.Toplevel):
+class HelpWindov(Toplevel):
 
     
     def __init__(self, master, *args):
         
         super().__init__(master, *args)
+        
         self.title("help")
         self.geometry("600x400")
-        self.button = tb.Button(self, text="Close", command=self.destroy)
-        self.button.pack(pady=10, side=BOTTOM)
-        self.text = tb.Text(self, font="Calibri, 12")
-        self.text.insert("end",HELP_MSG)
-        self.text.pack(side=LEFT, fill=BOTH, expand=True)
-        self.grab_set()
+        try:
+            with open("assets\\help.txt", "r") as f:
+                msg = f.read()
+            self.button = tb.Button(self, text="Close", command=self.destroy)
+            self.button.pack(pady=10, side=BOTTOM)
+            self.text = tb.Text(self, wrap=WORD , background="lightgrey",
+                                foreground="black", font="Helvetica, 12", state="disabled")
+            self.text.insert("end", msg)
+            self.text.pack(side=LEFT, fill=BOTH, expand=True, padx = 10)
+            self.grab_set()
+        except FileNotFoundError:
+            Messagebox.show_error(f'help file not found')
+        
+        
 
 
 class App(tb.Window):

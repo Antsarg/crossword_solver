@@ -11,7 +11,7 @@ The scope of the program is to find all the possible answers for a Crossword Puz
 ### How to use
 <div align = justify>
 Enter the known letters for the world to be solved in the Entry Field at the top of the windows. Enter "?" for the letters not discovered yet, press the "search" green button to look for matching words, they will appear in the display area in the centre of the screen.
-To reset the entry field and display Area press the "clear" red button
+To reset the entry field and display Area press the "clear" red button.
 The software will display ordinary words that you can find in dictionaries and also names of places, book, film and song.
 </div>
 

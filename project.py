@@ -67,8 +67,9 @@ class HelpWindov(Toplevel):
             self.button = tb.Button(self, text="Close", command=self.destroy)
             self.button.pack(pady=10, side=BOTTOM)
             self.text = tb.Text(self, wrap=WORD , background="lightgrey",
-                                foreground="black", font="Helvetica, 12", state="disabled")
+                                foreground="black", font="Helvetica, 12")
             self.text.insert("end", msg)
+            self.text.config(state="disabled")
             self.text.pack(side=LEFT, fill=BOTH, expand=True, padx = 10)
             self.grab_set()
         except FileNotFoundError:
